@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+				content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+<div>
+	我是HTML页面
+	<div id="content"></div>
+</div>
+<script>
+	console.log(999)
+	var source = new EventSource('http://localhost:3333/sendMessage')
+	source.onopen = function (event) { // 与服务器连接成功回调
+		console.log('成功与服务器连接')
+	}
+	// 监听从服务器发送来的所有没有指定事件类型的消息(没有event字段的消息)
+	source.onmessage = function (event) { // 监听未命名事件
+		console.log('未命名事件', event.data)
+	}
+	source.onerror = function (error) { // 监听错误
+		console.log('错误')
+	}
+	// 监听指定类型的事件（可以监听多个）
+	source.addEventListener("myEve", function (event) {
+		console.log("myEve", event.data)
+		document.querySelector("#content").innerHTML = event.data
+	})
+</script>
+</body>
+</html>
